@@ -1,0 +1,5 @@
+BUILD_VERSION = "1"
+IMAGE_NAME = "wg"
+SOURCE_IMAGE_ID = ""
+YC_SUBNET_ID = ""
+YC_ZONE = "ru-central-a"
