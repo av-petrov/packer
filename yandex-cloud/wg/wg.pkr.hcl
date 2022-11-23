@@ -25,11 +25,11 @@ variable "IMAGE_NAME" {
 
 source "yandex" "wg" {
   folder_id       = "${var.YC_FOLDER_ID}"
-  image_name      = "${var.image_name}-${var.build_version}"
-  source_image_id = "${var.source_image_id}"
+  image_name      = "${var.IMAGE_NAME}-${var.BUILD_VERSION}"
+  source_image_id = "${var.SOURCE_IMAGE_ID}"
   ssh_timeout     = "60m"
   ssh_username    = "ubuntu"
-  subnet_id       = ${var.YC_SUBNET_ID}"
+  subnet_id       = "${var.YC_SUBNET_ID}"
   use_ipv4_nat    = "true"
   zone            = "${var.YC_ZONE}"
   instance_cores  = 2
