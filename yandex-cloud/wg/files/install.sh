@@ -9,4 +9,3 @@ systemctl enable wg-quick@wg0.service
 apt-get clean
 > /var/log/syslog
 > /var/log/cloud-init.log
-rm /var/log/syslog.*
