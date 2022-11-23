@@ -3,7 +3,7 @@
 ### Предварительно
 Для предварительной настройки конфигов и ключей нужна ВМ с установленной Ubunto 20.04 (или на любой другой вкус), и установленным там Wireguard.
 ```bash
-sudo cat >> wg0.conf << EOF
+sudo cat >> /etc/wireguard/wg0.conf << EOF
 [Interface]
 Address = 172.29.30.1/24
 PostUp = ufw route allow in on wg0 out on eth0
@@ -38,14 +38,19 @@ sudo systemctl restart wg-quick@wg0.service
 
 sudo apt install qrencode
 qrencode -t ansiutf8 < ${WG_CL_NAME}.conf
+
+sudo tar czvf /tmp/wg.tgz /etc/wireguard
+
+# на локальном компьютере
+scp <remote_temporary_host>:/tmp/wg.tgz files/sensitive/
 ```
 
+### Сборка образа
 ```bash
 export YC_FOLDER_ID=$(yc config get folder-id)
 export YC_TOKEN=$(yc iam create-token)
 packer validate . && packer build .
 ```
-
 
 ### Ссылки
 1. По мотивам [статьи](https://habr.com/ru/post/486452/)
