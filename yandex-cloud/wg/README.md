@@ -6,7 +6,6 @@
 sudo cat >> wg0.conf << EOF
 [Interface]
 Address = 172.29.30.1/24
-SaveConfig = true
 PostUp = ufw route allow in on wg0 out on eth0
 PostUp = iptables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
 PostUp = ip6tables -t nat -I POSTROUTING -o eth0 -j MASQUERADE
@@ -21,10 +20,32 @@ sudo cat /etc/wireguard/private.key | wg pubkey | sudo tee /etc/wireguard/public
 echo -e "PrivateKey = $(sudo cat /etc/wireguard/private.key)\n" | sudo tee -a /etc/wireguard/wg0.conf
 # peers
 cd ~
-wg genkey | tee wg-client-private.key | wg pubkey > wg-client-public.key
+WG_CL_NAME="wg-client"; wg genkey | tee ${WG_CL_NAME}-private.key | wg pubkey > ${WG_CL_NAME}-public.key
+cat >> ${WG_CL_NAME}.conf << EOF
+[Interface]
+Address = 172.29.30.3/32
+PrivateKey = $(cat ${WG_CL_NAME}-private.key)
+DNS = 8.8.8.8
+
+[Peer]
+PublicKey = $(sudo cat /etc/wireguard/public.key)
+AllowedIPs = 0.0.0.0/0
+Endpoint = wg.example.com:51820
+EOF
+
+echo -e "\n[Peer]\nPublicKey = $(cat ${WG_CL_NAME}-public.key)\nAllowedIPs = 172.29.30.3/32" | sudo tee -a /etc/wireguard/wg0.conf
+sudo systemctl restart wg-quick@wg0.service
+
+sudo apt install qrencode
+qrencode -t ansiutf8 < ${WG_CL_NAME}.conf
 ```
 
 ```bash
 export YC_FOLDER_ID=$(yc config get folder-id)
 export YC_TOKEN=$(yc iam create-token)
+packer validate . && packer build .
 ```
+
+
+### Ссылки
+1. По мотивам [статьи](https://habr.com/ru/post/486452/)
