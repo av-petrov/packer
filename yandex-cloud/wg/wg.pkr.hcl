@@ -1,9 +1,9 @@
 variable "BUILD_VERSION" {
-  type    = string
+  type = string
 }
 
 variable "YC_FOLDER_ID" {
-  type = string
+  type    = string
   default = env("YC_FOLDER_ID")
 }
 
@@ -16,11 +16,11 @@ variable "YC_SUBNET_ID" {
 }
 
 variable "SOURCE_IMAGE_ID" {
-  type    = string
+  type = string
 }
 
 variable "IMAGE_NAME" {
-  type    = string
+  type = string
 }
 
 source "yandex" "wg" {
